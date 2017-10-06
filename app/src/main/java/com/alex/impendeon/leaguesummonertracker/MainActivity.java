@@ -1,6 +1,9 @@
 package com.alex.impendeon.leaguesummonertracker;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,7 +22,10 @@ import net.rithms.riot.constant.Platform;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -38,31 +42,55 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        TextView textView = (TextView) findViewById(R.id.sumname);
-        try{
-           Summoner t = initApi();
-            textView.setText(Long.toString(t.getAccountId()));
-        }
-        catch (RiotApiException e){
-            e.printStackTrace();
-        }
+        textView = (TextView) findViewById(R.id.sumname);
+        getDataUpdateUITask task = new getDataUpdateUITask();
+        task.execute();
 
 
     }
 
     public static Summoner initApi() throws RiotApiException{
-        ApiConfig config = new ApiConfig().setKey("RGAPI-0a7e579d-07d9-4f4f-a417-f1e0d122353c");
+        ApiConfig config = new ApiConfig().setKey("RGAPI-7b758041-5933-4bd1-a9d1-e65a9758094c");
         RiotApi api = new RiotApi(config);
         Summoner summoner = api.getSummonerByName(Platform.NA, "Impendeon");
+        //textView.setText(Long.toString(summoner.getAccountId()));
         return summoner;
 
     }
-    public static void startThread(){
-        Thread apiThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                initApi();
+
+//    public void meow(){
+//        Handler handler = new Handler();
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        })
+//    }
+//    public void startThread(TextView textView){
+//        Handler handler = new Handler(Looper.getMainLooper());
+//        handler.post(new Runnable(){
+//    tvLocation.setText(getaddress());
+//    tvTime.setText(r.getStringDate());
+//        });
+//    }
+    private class getDataUpdateUITask extends AsyncTask<Void, Void, Summoner>{
+        @Override
+        protected Summoner doInBackground(Void... voids) {
+            Summoner ret = null;
+            try{
+                ret = initApi();
             }
-        });
+            catch (RiotApiException e){
+                e.printStackTrace();
+            }
+            return ret;
+        }
+
+        @Override
+        protected void onPostExecute(Summoner summoner) {
+            if(summoner != null)
+            textView.setText(Long.toString(summoner.getAccountId()));
+        }
     }
 }
