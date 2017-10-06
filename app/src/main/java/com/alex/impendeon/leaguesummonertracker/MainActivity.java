@@ -2,9 +2,6 @@ package com.alex.impendeon.leaguesummonertracker;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,16 +13,22 @@ import net.rithms.riot.api.ApiConfig;
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
-import net.rithms.riot.api.endpoints.match.dto.MatchList;
-import net.rithms.riot.api.endpoints.match.dto.MatchReference;
 import net.rithms.riot.constant.Platform;
 
-import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+//Git add -u
+//git commit -m
+//git push origin master
 
 public class MainActivity extends AppCompatActivity {
     private TextView textView;
+    private File internalStorage;
+    private ArrayList<Summoner> summoners;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        summoners = new ArrayList<Summoner>;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,44 +46,48 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
         textView = (TextView) findViewById(R.id.sumname);
         getDataUpdateUITask task = new getDataUpdateUITask();
         task.execute();
+        storageRunnable runnable = new storageRunnable();
+        runnable.run();
 
 
     }
 
-    public static Summoner initApi() throws RiotApiException{
+    public Summoner initApi(String account) throws RiotApiException{
         ApiConfig config = new ApiConfig().setKey("RGAPI-7b758041-5933-4bd1-a9d1-e65a9758094c");
         RiotApi api = new RiotApi(config);
-        Summoner summoner = api.getSummonerByName(Platform.NA, "Impendeon");
-        //textView.setText(Long.toString(summoner.getAccountId()));
+        Summoner summoner = api.getSummonerByName(Platform.NA, account);
+        summoners.add(summoner);
         return summoner;
 
     }
 
-//    public void meow(){
-//        Handler handler = new Handler();
-//        handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        })
-//    }
-//    public void startThread(TextView textView){
-//        Handler handler = new Handler(Looper.getMainLooper());
-//        handler.post(new Runnable(){
-//    tvLocation.setText(getaddress());
-//    tvTime.setText(r.getStringDate());
-//        });
-//    }
-    private class getDataUpdateUITask extends AsyncTask<Void, Void, Summoner>{
+    public void writeData(Summoner summoner){
+        File save = new File(internalStorage, "Data.txt");
+        try{
+            FileWriter w = new FileWriter(save);
+            w.append(summoner.getName() + "|" + summoner.getAccountId());
+            w.flush();
+            w.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    private class getDataUpdateUITask extends AsyncTask<String, Void, Summoner>{
         @Override
-        protected Summoner doInBackground(Void... voids) {
+        protected Summoner doInBackground(String... strings) {
             Summoner ret = null;
             try{
-                ret = initApi();
+                ret = initApi(strings[0]);
             }
             catch (RiotApiException e){
                 e.printStackTrace();
@@ -91,6 +99,18 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Summoner summoner) {
             if(summoner != null)
             textView.setText(Long.toString(summoner.getAccountId()));
+        }
+    }
+
+    public class storageRunnable implements Runnable{
+        @Override
+        public void run() {
+            internalStorage = getFilesDir();
+            File accounts = new File(internalStorage, "Accounts");
+            if(!accounts.exists()){
+                accounts.mkdirs();
+            }
+            writeData(summoners.get(0));
         }
     }
 }
