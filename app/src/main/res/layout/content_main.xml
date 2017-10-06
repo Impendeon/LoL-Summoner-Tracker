@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.alex.impendeon.leaguesummonertracker.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/sumicon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"/>
+            <TextView
+                android:id="@+id/sumname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Summoner"
+                android:textSize="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"/>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/sumicon"
+                android:background="@color/cardview_light_background"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"/>
+
+            <Button
+                android:id="@+id/testb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:text="Button" />
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</android.support.v4.widget.NestedScrollView>
