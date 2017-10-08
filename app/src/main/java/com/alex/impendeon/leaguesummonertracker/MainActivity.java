@@ -1,5 +1,6 @@
 package com.alex.impendeon.leaguesummonertracker;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        summoners = new ArrayList<Summoner>;
+        summoners = new ArrayList<Summoner>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -49,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         textView = (TextView) findViewById(R.id.sumname);
+        SharedPreferences accounts = getSharedPreferences("UserInfo", 0); //Gets data from shareaccount and returns "" if it does not exist
+        textView.setText(accounts.getString("Username", ""));
         getDataUpdateUITask task = new getDataUpdateUITask();
-        task.execute();
-        storageRunnable runnable = new storageRunnable();
-        runnable.run();
+        task.execute("Impendeon");
 
 
     }
@@ -62,24 +63,28 @@ public class MainActivity extends AppCompatActivity {
         RiotApi api = new RiotApi(config);
         Summoner summoner = api.getSummonerByName(Platform.NA, account);
         summoners.add(summoner);
+        SharedPreferences accounts = getSharedPreferences("UserInfo", 0);
+        SharedPreferences.Editor editor = accounts.edit();
+        editor.putString("Username","MEOW");
+        editor.commit();
         return summoner;
 
     }
 
-    public void writeData(Summoner summoner){
-        File save = new File(internalStorage, "Data.txt");
-        try{
-            FileWriter w = new FileWriter(save);
-            w.append(summoner.getName() + "|" + summoner.getAccountId());
-            w.flush();
-            w.close();
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-
-
-    }
+//    public void writeData(Summoner summoner){
+//        File save = new File(internalStorage, "Data.txt");
+//        try{
+//            FileWriter w = new FileWriter(save);
+//            w.append(summoner.getName() + "|" + summoner.getAccountId());
+//            w.flush();
+//            w.close();
+//        }
+//        catch(IOException e){
+//            e.printStackTrace();
+//        }
+//
+//
+//    }
 
 
     private class getDataUpdateUITask extends AsyncTask<String, Void, Summoner>{
@@ -102,15 +107,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class storageRunnable implements Runnable{
-        @Override
-        public void run() {
-            internalStorage = getFilesDir();
-            File accounts = new File(internalStorage, "Accounts");
-            if(!accounts.exists()){
-                accounts.mkdirs();
-            }
-            writeData(summoners.get(0));
-        }
-    }
+//    public class storageRunnable implements Runnable{
+//        @Override
+//        public void run() {
+//            internalStorage = getFilesDir();
+//            File accounts = new File(internalStorage, "Accounts");
+//            if(!accounts.exists()){
+//                accounts.mkdirs();
+//            }
+//            writeData(summoners.get(0));
+//        }
+//    }
 }
