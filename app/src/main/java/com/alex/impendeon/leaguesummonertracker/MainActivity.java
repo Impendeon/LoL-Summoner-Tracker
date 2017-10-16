@@ -1,5 +1,6 @@
 package com.alex.impendeon.leaguesummonertracker;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -25,15 +26,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.rithms.riot.api.ApiConfig;
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
+import net.rithms.riot.api.endpoints.league.dto.LeagueList;
+import net.rithms.riot.api.endpoints.league.methods.GetLeagueBySummonerId;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 import net.rithms.riot.constant.Platform;
 
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 //Git add -u
 //git commit -m
@@ -46,12 +53,15 @@ Return a visable error if the summoner cant be found.
 Make sure iceford isnt always being made.
  */
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Summoner> summoners;
+    private ArrayList<SummonerAccount> summoners;
     private LayoutInflater inflater;
     private String name;
     private RecyclerView recyclerView;
     private MyAdapter myAdapter;
     private CoordinatorLayout coordinatorLayout;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private Set<String> accountnames;
     final private static String RIOTKEY = "RGAPI-28814495-bbdf-4171-ace7-d62dc79bc427";
     Context context;
     NestedScrollView nestedScrollView;
@@ -62,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        summoners = new ArrayList<Summoner>();
+        summoners = new ArrayList<SummonerAccount>();
         context = getApplicationContext();
+        pref = getSharedPreferences("Accounts", MODE_PRIVATE);
+        editor = pref.edit();
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id
                 .coordinator);
 
@@ -76,6 +88,39 @@ public class MainActivity extends AppCompatActivity {
 
          myAdapter = new MyAdapter(this,summoners);
         recyclerView.setAdapter(myAdapter);
+
+        accountnames = pref.getStringSet("Accounts", null);
+
+
+        if(accountnames != null) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (String s : accountnames) {
+                        try {
+                            loadSummoner(s);
+                        } catch (RiotApiException e) {
+                        }
+
+                    }
+                }
+            });
+            thread.start();
+//           MaterialDialog.Builder builder = new MaterialDialog.Builder(this).title("Getting Summoner").progress(true, 0);
+//            MaterialDialog dialog = builder.build();
+//            dialog.show();
+            try {
+                thread.join();
+                myAdapter.notifyDataSetChanged();
+                //dialog.dismiss();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(accountnames == null){
+            accountnames = new HashSet<String>();
+        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
                                 try {
                                     initApi(name);
                                     makeToast(true);
+                                    editor.remove("Accounts");
+                                    editor.commit();
+                                    editor.putStringSet("Accounts", accountnames);
+                                    editor.commit();
                                 }
                                 catch (RiotApiException e) {
                                     makeToast(false);
@@ -130,17 +179,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void loadSummoner(String account) throws RiotApiException{
+        ApiConfig config = new ApiConfig().setKey(RIOTKEY);
+        RiotApi api = new RiotApi(config);
+        Summoner summoner = api.getSummonerByName(Platform.NA, account);
+        SummonerAccount summonerAccount = new SummonerAccount(summoner,
+                api.getLeagueBySummonerId(Platform.NA, summoner.getId()));
+        summonerAccount.setMatchList(api.getMatchListByAccountId(Platform.NA,summoner.getAccountId()));
+        summonerAccount.getEloDecay();
+        summoners.add(summonerAccount);
+    }
+
+    public void deleteSummoner(Summoner summoner){
+        editor.remove("Accounts");
+        editor.commit();
+        accountnames.remove(summoner.getName());
+        editor.putStringSet("Accounts", accountnames);
+        editor.commit();
+        summoners.remove(summoner);
+    }
+
 
     public Summoner initApi(String account) throws RiotApiException{
         ApiConfig config = new ApiConfig().setKey(RIOTKEY);
         RiotApi api = new RiotApi(config);
         Summoner summoner = api.getSummonerByName(Platform.NA, account);
-        summoners.add(summoner);
-//        Log.d("MainActivity", "headFdsa");
-//       SharedPreferences accounts = getSharedPreferences("UserInfo", 0);
-//       SharedPreferences.Editor editor = accounts.edit();
-//        editor.putString("Username",summoner.getName());
-//        editor.commit();
+        SummonerAccount summonerAccount = new SummonerAccount(summoner,
+                api.getLeagueBySummonerId(Platform.NA, summoner.getId()));
+        summonerAccount.setMatchList(api.getMatchListByAccountId(Platform.NA,summoner.getAccountId()));
+        summoners.add(summonerAccount);
+        accountnames.add(summonerAccount.summoner.getName());
         return summoner;
 
     }
