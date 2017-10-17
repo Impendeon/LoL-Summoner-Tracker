@@ -49,7 +49,7 @@ public class SummonerAccount {
         return "none";
     }
     public String getEloDecay() {
-        long time;
+        long time = 0;
         if (matchList.getMatches() != null) {
             for (MatchReference match : matchList.getMatches()) {
                if(match.getQueue() == 420) {
@@ -59,8 +59,11 @@ public class SummonerAccount {
 
             }
         }
-        long tsLong = System.currentTimeMillis()/1000;
+        long tsLong = System.currentTimeMillis();
+        long difference = Math.abs(tsLong) - Math.abs(time);
+        int days = (int) (difference / (1000*60*60*24));
+        int daysTillDecay = 28 - days;
 
-        return "";
+        return "You will decay in " + daysTillDecay + " days";
     }
 }

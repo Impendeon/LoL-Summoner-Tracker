@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Set<String> accountnames;
-    final private static String RIOTKEY = "RGAPI-28814495-bbdf-4171-ace7-d62dc79bc427";
+    final private static String RIOTKEY = "RGAPI-0ef7b6ac-a4c4-4ac0-8931-71e56166527e";
     Context context;
     NestedScrollView nestedScrollView;
 
@@ -190,13 +190,16 @@ public class MainActivity extends AppCompatActivity {
         summoners.add(summonerAccount);
     }
 
-    public void deleteSummoner(Summoner summoner){
+    public void deleteSummoner(SummonerAccount summoner){
         editor.remove("Accounts");
         editor.commit();
-        accountnames.remove(summoner.getName());
+        accountnames.remove(summoner.summoner.getName());
         editor.putStringSet("Accounts", accountnames);
         editor.commit();
         summoners.remove(summoner);
+        myAdapter = new MyAdapter(this,summoners);
+        recyclerView.setAdapter(myAdapter);
+        myAdapter.notifyDataSetChanged();
     }
 
 

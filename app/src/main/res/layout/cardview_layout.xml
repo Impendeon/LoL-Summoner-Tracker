@@ -8,8 +8,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        card_view:cardCornerRadius="4dp"
+        android:layout_height="150dp"
         android:layout_margin="5dp">
 
         <RelativeLayout
@@ -17,31 +16,33 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/sumicon"
+                android:id="@+id/tier"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true" />
+
             <TextView
                 android:id="@+id/sumname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:text="Summoner"
-                android:textSize="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_marginLeft="15dp"
+                android:textColor="@android:color/white"
+                android:textSize="40dp" />
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_below="@+id/sumicon"
-                android:background="@color/cardview_light_background"
+                android:layout_below="@+id/sumname"
                 android:gravity="center_vertical"
-                android:textColor="@android:color/black"
-                android:textSize="14dp"/>
-
-
+                android:layout_marginLeft="20dp"
+                android:textColor="@android:color/white"
+                android:textSize="14dp" />
 
 
         </RelativeLayout>
