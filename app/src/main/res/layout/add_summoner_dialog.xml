@@ -3,6 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.AppCompatSpinner
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_height="match_parent"
+        android:id="@+id/serverlist"
+        android:spinnerMode="dropdown"
+        android:entries="@array/servers">
+    </android.support.v7.widget.AppCompatSpinner>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,5 +20,19 @@
         android:hint="Summoner Name"
         android:layout_margin="20dp"
         android:layout_weight="1"/>
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/username"-->
+        <!--android:hint="Username (optional)"-->
+        <!--android:layout_margin="20dp"-->
+        <!--android:layout_weight="1"/>-->
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/password"-->
+        <!--android:hint="Password (optional)"-->
+        <!--android:layout_margin="20dp"-->
+        <!--android:layout_weight="1"/>-->
 
 </LinearLayout>

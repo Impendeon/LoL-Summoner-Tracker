@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,6 +45,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         final SummonerAccount summonerAccount  = productList.get(position);
 
         holder.mTextView.setText(summonerAccount.summoner.getName());
+//        holder.mTextView.setClickable(true);
+//        holder.mTextView.setMovementMethod(LinkMovementMethod.getInstance());
+//        holder.mTextView.setText(Html.fromHtml( "<a href='"+summonerAccount.link+"'>"+summonerAccount.summoner.getName()+"</a>"));
         holder.mTextView2.setText(summonerAccount.getEloDecay());
         if(summonerAccount.getRank().equals("DIAMOND")){
             holder.mImageView.setImageResource(R.drawable.diamond);
@@ -59,6 +64,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         else if(summonerAccount.getRank().equals("BRONZE")){
             holder.mImageView.setImageResource(R.drawable.gold);
         }
+        else if(summonerAccount.getRank().equals("CHALLENGER")){
+            holder.mImageView.setImageResource(R.drawable.challenger);
+        }
+        else if(summonerAccount.getRank().equals("MASTER")){
+            holder.mImageView.setImageResource(R.drawable.master);
+        }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -71,7 +82,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 if(context instanceof MainActivity){
-                                    ((MainActivity) context).deleteSummoner(summonerAccount);
+                                    ((MainActivity) context).deleteSummoner(summonerAccount, summonerAccount.server);
                                 }
                             }
                         })
@@ -94,9 +105,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             }
         });
         //SAVE COLOR
-        int[] androidColors = context.getResources().getIntArray(R.array.androidcolors);
-        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
-        holder.cardView.setBackgroundColor(randomAndroidColor);
 
     }
 

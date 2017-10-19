@@ -8,6 +8,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
+        card_view:cardBackgroundColor="@color/greyice"
         android:layout_height="150dp"
         android:layout_margin="5dp">
 
@@ -33,6 +34,17 @@
                 android:layout_marginLeft="15dp"
                 android:textColor="@android:color/white"
                 android:textSize="40dp" />
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/ladderpoints"-->
+                <!--android:text="Division"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--/>-->
 
             <TextView
                 android:id="@+id/title"
