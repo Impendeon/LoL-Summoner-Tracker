@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">League Decay Tracker</string>
+    <string name="app_name">League Of Decay</string>
     <string-array name="servers">
         <item>NA</item>
         <item>EUW</item>

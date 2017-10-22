@@ -18,21 +18,24 @@
         android:layout_height="match_parent"
         android:id="@+id/addSummonerText"
         android:hint="Summoner Name"
+        android:textColorHint="@android:color/white"
+        android:layout_margin="20dp"
+        android:layout_weight="1" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/username"
+        android:textColorHint="@android:color/white"
+        android:hint="Username (optional)"
         android:layout_margin="20dp"
         android:layout_weight="1"/>
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/username"-->
-        <!--android:hint="Username (optional)"-->
-        <!--android:layout_margin="20dp"-->
-        <!--android:layout_weight="1"/>-->
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/password"-->
-        <!--android:hint="Password (optional)"-->
-        <!--android:layout_margin="20dp"-->
-        <!--android:layout_weight="1"/>-->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/password"
+        android:hint="Password (optional)"
+        android:textColorHint="@android:color/white"
+        android:layout_margin="20dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

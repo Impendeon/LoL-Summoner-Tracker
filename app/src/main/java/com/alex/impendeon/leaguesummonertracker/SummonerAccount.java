@@ -13,18 +13,14 @@ import net.rithms.riot.api.endpoints.league.constant.LeagueQueue;
 
 import java.util.List;
 
-/**
- * Created by alex on 10/16/17.
- */
-/*
-TODO:
- */
 
 public class SummonerAccount {
     public Summoner summoner;
     public List<LeagueList> leagueListList;
     public String link;
     public String server;
+    public String username;
+    public String password;
 
     public LeagueItem getLeagueItem() {
         return leagueItem;

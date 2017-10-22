@@ -2,6 +2,7 @@ package com.alex.impendeon.leaguesummonertracker;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -45,9 +46,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         final SummonerAccount summonerAccount  = productList.get(position);
 
         holder.mTextView.setText(summonerAccount.summoner.getName());
-//        holder.mTextView.setClickable(true);
-//        holder.mTextView.setMovementMethod(LinkMovementMethod.getInstance());
-//        holder.mTextView.setText(Html.fromHtml( "<a href='"+summonerAccount.link+"'>"+summonerAccount.summoner.getName()+"</a>"));
         holder.mTextView2.setText(summonerAccount.getEloDecay());
         if(summonerAccount.getRank().equals("DIAMOND")){
             holder.mImageView.setImageResource(R.drawable.diamond);
@@ -101,10 +99,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                new MaterialDialog.Builder(context).title("Login Info").customView(R.layout.login_info_dialog, false).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                builder.setTitle("");
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                View dialoglayout = inflater.inflate(R.layout.login_info_dialog, null);
+                TextView username = (TextView) dialoglayout.findViewById(R.id.username);
+                TextView password = (TextView) dialoglayout.findViewById(R.id.password);
+                username.append(" "+summonerAccount.username);
+                password.append(" "+ summonerAccount.password);
+                builder.setView(dialoglayout);
+                builder.show();
+
             }
         });
-        //SAVE COLOR
 
     }
 

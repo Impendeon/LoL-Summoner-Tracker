@@ -3,16 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginLeft="20dp"
         android:id="@+id/username"
+        android:textColor="@android:color/white"
         android:text="Username:"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:id="@+id/password"
         android:layout_marginLeft="20dp"
+        android:textColor="@android:color/white"
         android:layout_below="@id/username"
         android:text="Password:"/>
 

@@ -52,7 +52,7 @@
                 android:layout_height="80dp"
                 android:layout_below="@+id/sumname"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="15dp"
                 android:textColor="@android:color/white"
                 android:textSize="14dp" />
 
