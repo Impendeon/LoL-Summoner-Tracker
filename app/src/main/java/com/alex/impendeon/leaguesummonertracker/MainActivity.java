@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 final EditText editTextSummoner = (EditText) dialoglayout.findViewById(R.id.addSummonerText);
                 final EditText editTextUsername = (EditText) dialoglayout.findViewById(R.id.username);
                 final EditText editTextPassword = (EditText) dialoglayout.findViewById(R.id.password);
+                final Spinner spinner = dialoglayout.findViewById(R.id.serverlist);
 
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -129,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
                         name = editTextSummoner.getText().toString();
                         username = editTextUsername.getText().toString();
                         password = editTextPassword.getText().toString();
+                        final String server = spinner.getSelectedItem().toString();
                         Thread t = new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    String server = spinner.getSelectedItem().toString();
                                     initApi(name, username, password, server);
                                     makeToast(true);
                                     editor.remove("Accounts");
